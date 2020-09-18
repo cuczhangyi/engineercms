@@ -1,5 +1,5 @@
 {{define "navbar"}}
-<!-- navbar-inverse一个带有黑色背景白色文本的导航栏 
+<!-- navbar-inverse一个带有黑色背景白色文本的导航栏
 固定在页面的顶部，向 .navbar class 添加 class .navbar-fixed-top
 为了防止导航栏与页面主体中的其他内容
 的顶部相交错，需要向 <body> 标签添加内边距，内边距的值至少是导航栏的高度。
@@ -401,7 +401,7 @@ function getKey() {
 <!--前端递归解析json 数据
  $(function () {
         var showlist = $("<ul></ul>");
-        showall(menulist.menulist, showlist); 
+        showall(menulist.menulist, showlist);
         $("#div_menu").append(showlist);
 });
 /**
@@ -424,7 +424,7 @@ function showall(menu_list, parent) {
            $("<li></li>").append(menu_list[menu].MName).appendTo(parent);
         }
     }
-} 
+}
 
 /**
  * Created on 2017/6/27.

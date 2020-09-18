@@ -311,7 +311,9 @@ func (c *ProjController) GetProject() {
 		beego.Error(err)
 	}
 	//取项目本身
+	//category, err := models.GetProj(idNum)
 	category, err := models.GetProj(idNum)
+
 	if err != nil {
 		beego.Error(err)
 	}
@@ -369,18 +371,20 @@ func (c *ProjController) GetProject() {
 	count = len(productcount)
 	// beego.Info(count)
 
-	for _, proj := range cates {
-		id := proj.Id
-		for _, m := range products {
-			if id == m.ProjectId {
-				count = count + 1
+	if idNum != 0 {
+		for _, proj := range cates {
+			id := proj.Id
+			for _, m := range products {
+				if id == m.ProjectId {
+					count = count + 1
+				}
 			}
-		}
-		// beego.Info(count)
-		slice := getsons(id, categories)
-		// 如果遍历的当前节点下还有节点，则进入该节点进行递归
-		if len(slice) > 0 {
-			getprodcount(slice, categories, products, &count)
+			// beego.Info(count)
+			slice := getsons(id, categories)
+			// 如果遍历的当前节点下还有节点，则进入该节点进行递归
+			if len(slice) > 0 {
+				getprodcount(slice, categories, products, &count)
+			}
 		}
 	}
 	// beego.Info(count)

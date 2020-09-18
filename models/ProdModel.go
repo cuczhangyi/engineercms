@@ -154,6 +154,9 @@ func GetProducts(id int64) (products []*Product, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("Product")
 	_, err = qs.Filter("ProjectId", id).OrderBy("-code").Limit(-1).All(&products)
+	if id == 0 {
+		_, err = qs.OrderBy("-code").Limit(-1).All(&products)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -162,18 +165,52 @@ func GetProducts(id int64) (products []*Product, err error) {
 
 //根据侧栏id分页查出所有成果——按编号排序
 func GetProductsPage(id, limit, offset, uid int64, searchText string) (products []*Product, err error) {
+/*	cond := orm.NewCondition()
+	cond1 := cond.And("profile__isnull", false).AndNot("status__in", 1).Or("profile__age__gt", 2000)
+
+	qs := orm.QueryTable("user")
+	qs = qs.SetCond(cond1)
+	// WHERE ... AND ... AND NOT ... OR ...
+
+	cond2 := cond.AndCond(cond1).OrCond(cond.And("name", "slene"))
+	qs = qs.SetCond(cond2).Count()
+	// WHERE (... AND ... AND NOT ... OR ...) OR ( ... )
+*/
+
 	o := orm.NewOrm()
 	qs := o.QueryTable("Product")
 	if searchText != "" {
 		cond := orm.NewCondition()
 		cond1 := cond.Or("Code__contains", searchText).Or("Title__contains", searchText).Or("Label__contains", searchText).Or("Principal__contains", searchText)
-		cond2 := cond.AndCond(cond1).And("ProjectId", id)
+		cond3 := cond.Or("ProjectId", id).Or("TopProjectId",id)
+		cond2 := cond.AndCond(cond1).AndCond(cond3)
+		if id == 0 {
+			cond2 = cond.AndCond(cond1)
+		}
 		qs = qs.SetCond(cond2)
 		_, err = qs.Limit(limit, offset).OrderBy("-created").All(&products)
 	} else if uid == 0 {
-		_, err = qs.Filter("ProjectId", id).Limit(limit, offset).OrderBy("-created").All(&products)
+		if id == 0 {
+			_, err = qs.Limit(limit, offset).OrderBy("-created").All(&products)
+		} else {
+
+			cond := orm.NewCondition()
+			cond3 := cond.Or("ProjectId", id).Or("TopProjectId",id)
+			qs = qs.SetCond(cond3)
+
+			_, err = qs.Limit(limit, offset).OrderBy("-created").All(&products)
+		}
+
 	} else if uid != 0 {
-		_, err = qs.Filter("ProjectId", id).Filter("Uid", uid).Limit(limit, offset).OrderBy("-created").All(&products)
+		if id == 0 {
+			_, err = qs.Filter("Uid", uid).Limit(limit, offset).OrderBy("-created").All(&products)
+		} else {
+
+			cond := orm.NewCondition()
+			cond3 := cond.Or("ProjectId", id).Or("TopProjectId",id)
+			qs = qs.SetCond(cond3)
+			_, err = qs.Filter("Uid", uid).Limit(limit, offset).OrderBy("-created").All(&products)
+		}
 	}
 	return products, err
 }
@@ -254,11 +291,22 @@ func GetProductsCount(id int64, searchText string) (count int64, err error) {
 	if searchText != "" {
 		cond := orm.NewCondition()
 		cond1 := cond.Or("Code__contains", searchText).Or("Title__contains", searchText).Or("Label__contains", searchText).Or("Principal__contains", searchText)
-		cond2 := cond.AndCond(cond1).And("ProjectId", id)
+		cond3 := cond.Or("ProjectId", id).Or("TopProjectId",id)
+		cond2 := cond.AndCond(cond1).AndCond(cond3)
+		if id == 0 {
+			cond2 = cond.AndCond(cond1)
+		}
 		qs = qs.SetCond(cond2)
 		count, err = qs.Limit(-1).Count()
 	} else {
-		count, err = qs.Filter("ProjectId", id).Count()
+		if id == 0  {
+			count, err = qs.Count()
+		} else {
+			cond := orm.NewCondition()
+			cond3 := cond.Or("ProjectId", id).Or("TopProjectId",id)
+			qs = qs.SetCond(cond3)
+			count, err = qs.Count()
+		}
 	}
 	return count, err
 }
@@ -289,11 +337,23 @@ func GetProjProducts(id int64, number int) (count int64, products []*Product, er
 	// for _, v := range projects {
 	// _, err = qs1.Filter("ProjectId", v.Id).OrderBy("-created").Limit(-1).All(&products1) //, "ProjectId"
 	if number == 1 { //查出所有成果列表
-		_, err = qs1.Filter("TopProjectId", id).OrderBy("-created").Limit(-1).All(&products) //,
+		if id == 0  {
+			_, err = qs1.OrderBy("-created").Limit(-1).All(&products) //,
+		} else {
+			_, err = qs1.Filter("TopProjectId", id).OrderBy("-created").Limit(-1).All(&products) //,
+		}
 	} else if number == 2 { //查出所有成果属于目录的关系
-		_, err = qs1.Filter("TopProjectId", id).OrderBy("-created").Limit(-1).All(&products, "Id", "ProjectId") //,
+		if id == 0 {
+			_, err = qs1.OrderBy("-created").Limit(-1).All(&products, "Id", "ProjectId") //,
+		} else {
+			_, err = qs1.Filter("TopProjectId", id).OrderBy("-created").Limit(-1).All(&products, "Id", "ProjectId") //,
+		}
 	} else if number == 3 {
-		count, err = qs1.Filter("TopProjectId", id).Limit(-1).Count()
+		if id == 0 {
+			count, err = qs1.Limit(-1).Count()
+		} else {
+			count, err = qs1.Filter("TopProjectId", id).Limit(-1).Count()
+		}
 	}
 	if err != nil {
 		return 0, nil, err

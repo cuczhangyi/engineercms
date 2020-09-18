@@ -134,7 +134,7 @@
           //显示结果表
           $("#rowtitle").html("搜寻结果");
           $("#details").show();
-          $('#table1').bootstrapTable('append', data);
+          $('#table1').bootstrapTable('load', data);
           $('#table1').bootstrapTable('scrollTo', 'bottom');
         }
       });

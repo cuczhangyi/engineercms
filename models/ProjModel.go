@@ -257,13 +257,20 @@ func GetProj(id int64) (proj Project, err error) {
 //输出：strings.split(上面的，",")
 func GetProjectsbyPid(id int64) (projects []*Project, err error) {
 	idstring := strconv.FormatInt(id, 10)
+	if id == 0 {
+		idstring = ""
+	}
 	// cond := orm.NewCondition()
 	// cond1 := cond.Or("Id", id).Or("ParentIdPath__contains", idstring+"-").Or("ParentId", id)
 	o := orm.NewOrm()
 	//先查出所有项目parent id path中包含id的数据
 	qs := o.QueryTable("Project")
 	// qs = qs.SetCond(cond1)
-	_, err = qs.Filter("ParentIdPath__contains", "$"+idstring+"#").Limit(-1).All(&projects, "Id", "ParentId", "Title", "Grade")
+	if id == 0 {
+		_, err = qs.Limit(-1).All(&projects, "Id", "ParentId", "Title", "Grade")
+	} else {
+		_, err = qs.Filter("ParentIdPath__contains", "$"+idstring+"#").Limit(-1).All(&projects, "Id", "ParentId", "Title", "Grade")
+	}
 	if err != nil {
 		return nil, err
 	}

@@ -84,50 +84,12 @@ a.navbar-brand {
         <input type="hidden" name="productid" id="productid" value="{{.Category.Id}}">
         <button type="submit" class="btn btn-default" id="search">Submit</button>
       </form>
-      <li {{if or .IsStandard .IsLegislation}} class="dropdown active" {{end}} class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          规范 <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-          <li {{if .IsStandard}} class="active" {{end}}>
-            <a href="/standard" target="_blank">查阅</a>
-          </li>
-          <li {{if .IsLegislation}} class="active" {{end}}>
-            <a href="/legislation" target="_blank">输入框对标</a>
-          </li>
-          <li {{if .IsLegislation}} class="active" {{end}}>
-            <a href="/legislation/fileinput" target="_blank">excel对标</a>
-          </li>
-          <li {{if .IsLegislation}} class="active" {{end}}>
-            <a href="/legislation/wordfileinput" target="_blank">word对标</a>
-          </li>
-        </ul>
-      </li>
       <!-- <li {{if .IsMonthCheck}}class="active"{{end}}>
         <a href="/v1/checkin/monthchecksum">考勤</a>
       </li> -->
       <!-- <li>
         <a href="/diary">日志</a>
       </li> -->
-      <li {{if or .IsMeetingroomCalendar .IsCarCalendar .IsOrderCalendar .IsAttendanceCalendar}} class="dropdown active" {{end}}>
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          预订 <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-          <li {{if .IsMeetingroomCalendar}} class="active" {{end}}>
-            <a href="/meetingroom">会议室&值班安排</a>
-          </li>
-          <li {{if .IsCarCalendar}} class="active" {{end}}>
-            <a href="/car">车辆</a>
-          </li>
-          <li {{if .IsOrderCalendar}} class="active" {{end}}>
-            <a href="/order">订餐</a>
-          </li>
-          <li {{if .IsAttendanceCalendar}} class="active" {{end}}>
-            <a href="/attendance">考勤</a>
-          </li>
-        </ul>
-      </li>
       <li {{if .IsBook}} class="active" {{end}}>
         <a href="/mindoc" title="创作你的书籍" target="_blank">BOOK</a>
       </li>
@@ -142,7 +104,7 @@ a.navbar-brand {
             <li><a href="/admin" title="管理">进入后台</a></li>
             <li><a href="/cms/#/flow/usertobeprocessed" title="邮箱">邮箱</a></li>
             <li><a href="javascript:void(0)" id="login">重新登录</a></li>
-            <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>
+{{/*            <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>*/}}
             <li><a href="/project/25001/gettimeline" title="大事记">大事记</a></li>
             <li><a href="/project/25001/getcalendar" title="项目日历">项目日历</a></li>
             <li><a href="/calendar" title="日程安排">日程安排</a></li>
@@ -156,7 +118,7 @@ a.navbar-brand {
             <li><a href="/cms/#/flow/usertobeprocessed" title="邮箱">邮箱</a></li>
             <li><a href="/user" title="用户资料">用户资料</a></li>
             <li><a href="javascript:void(0)" id="login">重新登录</a></li>
-            <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>
+{{/*            <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>*/}}
             <li><a href="/project/25001/gettimeline" title="大事记">大事记</a></li>
             <li><a href="/project/25001/getcalendar" title="项目日历">项目日历</a></li>
             <li><a href="/calendar" title="日程安排">日程安排</a></li>
@@ -172,7 +134,7 @@ a.navbar-brand {
             <li><a href="/admin" title="管理">进入后台</a></li>
             <li><a href="/cms/#/flow/usertobeprocessed" title="邮箱">邮箱</a></li>
             <li><a href="javascript:void(0)" id="login">重新登录</a></li>
-            <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>
+{{/*            <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>*/}}
             <li><a href="/project/25001/gettimeline" title="大事记">大事记</a></li>
             <li><a href="/project/25001/getcalendar" title="项目日历">项目日历</a></li>
             <li><a href="/calendar" title="日程安排">日程安排</a></li>
@@ -184,29 +146,13 @@ a.navbar-brand {
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{.Username}} <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="javascript:void(0)" id="login">登陆</a></li>
-            <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>
+{{/*            <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>*/}}
           </ul>
         </li>
         {{end}}
         {{end}}
         <li {{if .IsWiki}} class="active" {{end}}>
           <a href="/wiki">Wiki</a>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            帮助 <b class="caret"></b>
-          </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a href="/doc/ecms" title="工程师知识管理系统">EngineerCMS</a>
-            </li>
-            <li>
-              <a href="/doc/meritms" title="价值和成果管理系统">MeritMS</a>
-            </li>
-            <li>
-              <a href="/doc/hydrows" title="水利供水管线设计工具">HydroWS</a>
-            </li>
-          </ul>
         </li>
       </ul>
     </div>

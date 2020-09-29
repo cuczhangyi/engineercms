@@ -92,7 +92,6 @@
             <th data-field="Title" data-align="center" data-valign="middle">名称</th>
             <th data-field="Label" data-formatter="setLable" data-align="center" data-valign="middle">关键字</th>
             <th data-field="Principal" data-align="center" data-valign="middle">设计</th>
-            <th data-field="Articlecontent" data-formatter="setArticle" data-events="actionEvents" data-align="center" data-valign="middle">文章</th>
             <th data-field="Attachmentlink" data-formatter="setAttachment" data-events="actionEvents" data-align="center" data-valign="middle">附件</th>
             <th data-field="Pdflink" data-formatter="setPdf" data-events="actionEvents" data-align="center" data-valign="middle">PDF</th>
             <th data-field="Created" data-formatter="localDateFormatter" data-align="center" data-valign="middle">建立时间</th>

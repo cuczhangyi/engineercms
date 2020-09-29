@@ -337,7 +337,7 @@ func ResolveCommand(args []string) {
 	// RegisterDataBase()
 	RegisterCache()
 	// RegisterModel()
-	RegisterLogger(conf.LogFile)
+	//RegisterLogger(conf.LogFile)
 
 	ModifyPassword()
 
@@ -462,7 +462,7 @@ func RegisterAutoLoadConfig() {
 							continue
 						}
 						RegisterCache()
-						RegisterLogger("")
+						//RegisterLogger("")
 						beego.Info("配置文件已加载 ->", conf.ConfigurationFile)
 					} else if ev.IsRename() {
 						_ = watcher.WatchFlags(conf.ConfigurationFile, fsnotify.FSN_MODIFY|fsnotify.FSN_RENAME)

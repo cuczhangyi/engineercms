@@ -40,8 +40,6 @@
               <a href="#">pro sidebar</a>
             </div>
             <div class="sidebar-header">
-              <div class="user-pic">
-                <img class="img-responsive img-rounded mCS_img_loaded" src="/static/img/user.jpg" alt=""></div>
               <div class="user-info">
                 <span class="user-name">
                   Engineer <strong>CMS</strong>
@@ -54,17 +52,6 @@
                 </div>
               </div>
             </div>
-            <!-- sidebar-header  -->  
-            <div class="sidebar-search">
-              <div>
-                <div class="input-group">
-                  <input type="text" class="form-control search-menu" placeholder="Search for...">  
-                  <span class="input-group-addon"> <i class="fa fa-search"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <!-- sidebar-search  -->  
             <div class="sidebar-menu">
               <ul id="tree"></ul>
             </div>
@@ -84,17 +71,6 @@
     <!-- sidebar-content  -->  
 
     <div class="sidebar-footer">
-      <a href="#">
-        <i class="fa fa-bell"></i>
-        <span class="label label-warning notification">3</span>
-      </a>
-      <a href="#">
-        <i class="fa fa-envelope"></i>
-        <span class="label label-success notification">7</span>
-      </a>
-      <a href="#">
-        <i class="fa fa-gear"></i>
-      </a>
       <a href="/">
         <i class="fa fa-power-off"></i>
       </a>
@@ -154,34 +130,34 @@
                     id: '012',
                     nodeId: '012'
                   },
-                  { 
-                    icon: "fa fa-share-alt",
-                    text: "流程配置",
-                    id: '013',
-                    nodeId: '013'
-                  },
-                  { 
-                    icon: "fa fa-bug",
-                    text: "搜索IP",
-                    state: {
-                      // checked: true,
-                      disabled: true,
-                      // expanded: true,
-                      // selected: true
-                    },
-                    id: '013'
-                  }, 
-                  { 
-                    icon: "fa fa-bug",
-                    text: "升级数据库",
-                    state: {
-                      // checked: true,
-                      // disabled: true,
-                      // expanded: true,
-                      // selected: true
-                    },
-                    id: '014'
-                  }
+                  // {
+                  //   icon: "fa fa-share-alt",
+                  //   text: "流程配置",
+                  //   id: '013',
+                  //   nodeId: '013'
+                  // },
+                  // {
+                  //   icon: "fa fa-bug",
+                  //   text: "搜索IP",
+                  //   state: {
+                  //     // checked: true,
+                  //     disabled: true,
+                  //     // expanded: true,
+                  //     // selected: true
+                  //   },
+                  //   id: '013'
+                  // },
+                  // {
+                  //   icon: "fa fa-bug",
+                  //   text: "升级数据库",
+                  //   state: {
+                  //     // checked: true,
+                  //     // disabled: true,
+                  //     // expanded: true,
+                  //     // selected: true
+                  //   },
+                  //   id: '014'
+                  // }
                 ] 
               },
               {
@@ -206,26 +182,10 @@
                     text: "组织结构",
                     id: '030'
                   },
-                  { 
-                    icon: "fa fa-align-right",
-                    text: "用户-组织结构",
-                    state: {
-                      // checked: true,
-                      disabled: true,
-                      // expanded: true,
-                      // selected: true
-                    },
-                    id: '031'
-                  },
                   { icon: "fa fa-users",
                     text: '用户-角色',
                     id: '032'
                   }
-                  
-                  // { icon: "fa fa-group",
-                  //   text: '用户组',
-                  //   id: '033'
-                  // },
                 ]
               },
               {
@@ -248,30 +208,6 @@
                   { icon: "fa fa-users",
                     text: '角色-权限分配',
                     id: '021'
-                  },
-                  { icon: "fa fa-users",
-                    text: '用户-OO权限',
-                    state: {
-                      // checked: true,
-                      disabled: true,
-                      // expanded: true,
-                      // selected: true
-                    },
-                    id: '022'
-                  },
-                  { icon: "fa fa-users",
-                    text: '角色-OO权限',
-                    state: {
-                      // checked: true,
-                      disabled: true,
-                      // expanded: true,
-                      // selected: true
-                    },
-                    id: '023'
-                  },
-                  { icon: "fa fa-th",
-                    text: 'IP地址段',
-                    id: '024'
                   }
                 ]
               },
@@ -292,108 +228,73 @@
                     text: "编辑目录",
                     id: '041',
                     tags: [''],
-                  },
-                  { 
-                    icon: "fa fa-edit",
-                    text: "同步IP",
-                    id: '042'
-                  },
-                  { 
-                    icon: "fa fa-lock",
-                    text: "项目权限",
-                    state: {
-                      // checked: true,
-                      disabled: true,
-                      // expanded: true,
-                      // selected: true
-                    },
-                    id: '043'
-                  },
-                  { 
-                    icon: "fa fa-copy",
-                    text: "快捷编辑",
-                    state: {
-                      // checked: true,
-                      disabled: false,
-                      // expanded: true,
-                      // selected: true
-                    },
-                    id: '044',
                   }
                 ]
               }, 
+              // {
+              //   text: "成果清单",
+              //   icon: "fa fa-list-alt icon",
+              //   // selectedIcon: "glyphicon glyphicon-stop",
+              //   href: "#node-1",
+              //   // selectable: true,
+              //   id: '05',
+              //   selectable: false,
+              //   showTags:false,
+              //   tags: ['available'],
+              //   nodes:
+              //   [
+              //     {
+              //       icon: "fa fa-edit",
+              //       text: "Merit基本信息",
+              //       id: '051',
+              //       tags: [''],
+              //     },
+              //     {
+              //       icon: "fa fa-edit",
+              //       text: "未提交清单",
+              //       id: '052'
+              //     },
+              //     {
+              //       icon: "fa fa-lock",
+              //       text: "已提交清单",
+              //       state: {
+              //         // checked: true,
+              //         disabled: true,
+              //         // expanded: true,
+              //         // selected: true
+              //       },
+              //       id: '053'
+              //     },
+              //     {
+              //       icon: "fa fa-copy",
+              //       text: "预留",
+              //       state: {
+              //         // checked: true,
+              //         disabled: true,
+              //         // expanded: true,
+              //         // selected: true
+              //       },
+              //       id: '054',
+              //     }
+              //   ]
+              // },
               {
-                text: "成果清单",
+                text: "文章分类",
                 icon: "fa fa-list-alt icon",
-                // selectedIcon: "glyphicon glyphicon-stop",
                 href: "#node-1",
-                // selectable: true,
                 id: '05',
                 selectable: false,
                 showTags:false,
                 tags: ['available'],
-                nodes: 
-                [
-                  { 
-                    icon: "fa fa-edit",
-                    text: "Merit基本信息",
-                    id: '051',
-                    tags: [''],
-                  },
-                  { 
-                    icon: "fa fa-edit",
-                    text: "未提交清单",
-                    id: '052'
-                  },
-                  { 
-                    icon: "fa fa-lock",
-                    text: "已提交清单",
-                    state: {
-                      // checked: true,
-                      disabled: true,
-                      // expanded: true,
-                      // selected: true
-                    },
-                    id: '053'
-                  },
-                  { 
-                    icon: "fa fa-copy",
-                    text: "预留",
-                    state: {
-                      // checked: true,
-                      disabled: true,
-                      // expanded: true,
-                      // selected: true
-                    },
-                    id: '054',
-                  }
-                ]
-              },
-              {
-                text: "系统日志",
-                icon: "fa fa-list-alt icon",
-                // selectedIcon: "glyphicon glyphicon-stop",
-                href: "#node-6",
-                // selectable: true,
-                id: '06',
-                selectable: false,
-                showTags:false,
-                tags: ['available'],
-                nodes: 
-                [
-                  { 
-                    icon: "fa fa-edit",
-                    text: "info信息级别",
-                    id: '061',
-                    tags: [''],
-                  },
-                  { 
-                    icon: "fa fa-edit",
-                    text: "error错误信息",
-                    id: '062'
-                  },
-                ]
-              } 
+                nodes:
+                        [
+                          {
+                            icon: "fa fa-edit",
+                            text: "分类列表",
+                            id: '063'
+                          }
+                        ]
+              }
       ]
       // return data;
 
@@ -464,6 +365,8 @@
             $(".breadcrumb").html("<i class='fa fa-home'></i>后台&gt;系统日志&gt;"+data.text)
           }else if(data.id=="062"){
             $(".breadcrumb").html("<i class='fa fa-home'></i>后台&gt;系统日志&gt;"+data.text)
+          }else if(data.id=="063"){
+            $(".breadcrumb").html("<i class='fa fa-home'></i>后台&gt;分类&gt;"+data.text)
           }
           document.getElementById("iframepage").src="/admin/"+data.id;
         }); 

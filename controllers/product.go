@@ -76,6 +76,14 @@ type ArticleContent struct {
 	Updated time.Time
 }
 
+
+
+type ArticleTableserver struct {
+	Rows  []ArticleContent `json:"rows"`
+	Page  int64         `json:"page"`
+	Total int64         `json:"total"` //string或int64都行！
+}
+
 //后端分页的数据结构
 type prodTableserver struct {
 	Rows  []ProductLink `json:"rows"`
@@ -307,7 +315,7 @@ func (c *ProdController) GetProducts() {
 	link := make([]ProductLink, 0)
 	Attachslice := make([]AttachmentLink, 0)
 	Pdfslice := make([]PdfLink, 0)
-	Articleslice := make([]ArticleContent, 0)
+	//Articleslice := make([]ArticleContent, 0)
 	// tx, _ := db.Begin()
 	var tx *sql.Tx
 	// db.Close()
@@ -358,7 +366,7 @@ func (c *ProdController) GetProducts() {
 		Attachslice = make([]AttachmentLink, 0) //再把slice置0
 		Pdfslice = make([]PdfLink, 0)           //再把slice置0
 		// link = append(link, linkarr...)
-
+/*
 		//取得文章
 		Articles, err := models.GetArticles(w.Id)
 		if err != nil {
@@ -373,7 +381,7 @@ func (c *ProdController) GetProducts() {
 		}
 		linkarr[0].Articlecontent = Articleslice
 		Articleslice = make([]ArticleContent, 0)
-
+*/
 		//取得关联
 		relevancies, err := models.GetRelevancy(w.Id)
 		if err != nil {

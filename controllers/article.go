@@ -23,6 +23,14 @@ type ArticleController struct {
 	beego.Controller
 }
 
+
+func (c *ArticleController) GetArticleList() {
+	id := c.Ctx.Input.Param(":id")
+	c.Data["Id"] = id
+	c.TplName = "article_list.tpl"
+}
+
+
 //取得某个成果id下的文章给table
 func (c *ArticleController) GetArticles() {
 	pid := c.Ctx.Input.Param(":id")
@@ -41,10 +49,10 @@ func (c *ArticleController) GetArticles() {
 			beego.Error(err)
 		}
 		//查出成果编号，名称和作者
-		prod, err := models.GetProd(pidNum)
-		if err != nil {
-			beego.Error(err)
-		}
+		//prod, err := models.GetProd(pidNum)
+		//if err != nil {
+		//	beego.Error(err)
+		//}
 		//对文章进行循环
 		//赋予url
 		//如果是一个文章，直接给url;如果大于1个，则是数组:这个在前端实现
@@ -53,7 +61,7 @@ func (c *ArticleController) GetArticles() {
 		for _, v := range Articles {
 			articlearr := make([]ArticleContent, 1)
 			articlearr[0].Id = v.Id
-			articlearr[0].Title = prod.Title
+			//articlearr[0].Title = prod.Title
 			articlearr[0].Subtext = v.Subtext
 			articlearr[0].ProductId = v.ProductId
 			articlearr[0].Content = v.Content
@@ -112,10 +120,10 @@ func (c *ArticleController) ProvideArticles() {
 			beego.Error(err)
 		}
 		//查出成果编号，名称和作者
-		prod, err := models.GetProd(pidNum)
-		if err != nil {
-			beego.Error(err)
-		}
+		//prod, err := models.GetProd(pidNum)
+		//if err != nil {
+		//	beego.Error(err)
+		//}
 		//对文章进行循环
 		//赋予url
 		//如果是一个文章，直接给url;如果大于1个，则是数组:这个在前端实现
@@ -124,7 +132,7 @@ func (c *ArticleController) ProvideArticles() {
 		for _, v := range Articles {
 			articlearr := make([]ArticleContent, 1)
 			articlearr[0].Id = v.Id
-			articlearr[0].Title = prod.Title
+			//articlearr[0].Title = prod.Title
 			articlearr[0].Subtext = v.Subtext
 			articlearr[0].ProductId = v.ProductId
 			articlearr[0].Content = v.Content
@@ -1630,128 +1638,26 @@ func (c *ArticleController) GetListArticles() {
 func (c *ArticleController) AddArticle() {
 	_, _, uid, _, _ := checkprodRole(c.Ctx)
 
-	meritbasic, err := models.GetMeritBasic()
-	if err != nil {
-		beego.Error(err)
-	}
-	var catalog models.PostMerit
-	var news string
-	var cid int64
-
 	pid := c.Input().Get("pid")
-	code := c.Input().Get("code")
-	title := c.Input().Get("title")
+
 	subtext := c.Input().Get("subtext")
-	label := c.Input().Get("label")
-	principal := c.Input().Get("principal")
-	relevancy := c.Input().Get("relevancy")
+
 	content := c.Input().Get("content")
-	// c.Data["Id"] = id
-	// beego.Info(subtext)
-	//id转成64为
-	pidNum, err := strconv.ParseInt(pid, 10, 64)
+
+	cateId, err := strconv.ParseInt(pid, 10, 64)
 	if err != nil {
 		beego.Error(err)
 	}
-	//根据pid查出项目id
-	proj, err := models.GetProj(pidNum)
-	if err != nil {
-		beego.Error(err)
-	}
-	var topprojectid int64
-	if proj.ParentIdPath != "" {
-		parentidpath := strings.Replace(strings.Replace(proj.ParentIdPath, "#$", "-", -1), "$", "", -1)
-		parentidpath1 := strings.Replace(parentidpath, "#", "", -1)
-		patharray := strings.Split(parentidpath1, "-")
-		topprojectid, err = strconv.ParseInt(patharray[0], 10, 64)
-		if err != nil {
-			beego.Error(err)
-		}
-	} else {
-		topprojectid = proj.Id
-	}
-	//根据项目id添加成果code, title, label, principal, content string, projectid int64
-	Id, err := models.AddProduct(code, title, label, principal, uid, pidNum, topprojectid)
-	if err != nil {
-		beego.Error(err)
-	}
-
-	//*****添加成果关联信息
-	if relevancy != "" {
-		array := strings.Split(relevancy, ",")
-		for _, v := range array {
-			_, err = models.AddRelevancy(Id, v)
-			if err != nil {
-				beego.Error(err)
-			}
-		}
-	}
-	//*****添加成果关联信息结束
-
-	//成果写入postmerit表，准备提交merit*********
-	Number, Name, DesignStage, Section, err := GetProjTitleNumber(pidNum)
-	if err != nil {
-		beego.Error(err)
-	}
-	catalog.ProjectNumber = Number
-	catalog.ProjectName = Name
-	catalog.DesignStage = DesignStage
-	catalog.Section = Section
-
-	catalog.Tnumber = code
-	catalog.Name = title
-	catalog.Count = 1
-	catalog.Drawn = meritbasic.Nickname
-	catalog.Designd = meritbasic.Nickname
-	catalog.Author = meritbasic.Username
-	catalog.Drawnratio = 0.4
-	catalog.Designdratio = 0.4
-
-	const lll = "2006-01-02"
-	convdate := time.Now().Format(lll)
-	t1, err := time.Parse(lll, convdate) //这里t1要是用t1:=就不是前面那个t1了
-	if err != nil {
-		beego.Error(err)
-	}
-	catalog.Datestring = convdate
-	catalog.Date = t1
-
-	catalog.Created = time.Now() //.Add(+time.Duration(hours) * time.Hour)
-	catalog.Updated = time.Now() //.Add(+time.Duration(hours) * time.Hour)
-
-	catalog.Complex = 1
-	catalog.State = 0
-	//生成提交merit的清单结束*******************
-
 	//将文章添加到成果id下
-	aid, err := models.AddArticle(subtext, content, Id)
+	_, err = models.AddArticle(subtext, content, uid,cateId)
 	if err != nil {
 		beego.Error(err)
 	} else {
-		//生成提交merit的清单*******************
-		cid, err, news = models.AddPostMerit(catalog)
-		if err != nil {
-			beego.Error(err)
-		} else {
-			link1 := "/project/product/article/" + strconv.FormatInt(aid, 10) //附件链接地址
-			_, err = models.AddCatalogLink(cid, link1)
-			if err != nil {
-				beego.Error(err)
-			}
-			data := news
-			c.Ctx.WriteString(data)
-		}
-		//生成提交merit的清单结束*******************
-		c.Data["json"] = "ok"
+
+		c.Data["json"] = "guo,eiguo"
 		c.ServeJSON()
 	}
-	// } else {
-	// route := c.Ctx.Request.URL.String()
-	// c.Data["Url"] = route
-	// c.Redirect("/roleerr?url="+route, 302)
-	// c.Redirect("/roleerr", 302)
-	// return
-	// }
+
 }
 
 // @Title post wx artile by catalogId
@@ -1859,7 +1765,7 @@ func (c *ArticleController) AddWxArticle() {
 		beego.Error(err)
 	}
 	//将文章添加到成果id下
-	aid, err := models.AddArticle(title, content, Id)
+	aid, err := models.AddArticle(title, content, Id,0)
 	if err != nil {
 		beego.Error(err)
 		c.Data["json"] = map[string]interface{}{"info": "ERR", "id": aid}
@@ -1937,7 +1843,7 @@ func (c *ArticleController) AddWxEditorArticle() {
 		beego.Error(err)
 	}
 	//将文章添加到成果id下
-	aid, err := models.AddArticle(title, content, Id)
+	aid, err := models.AddArticle(title, content, Id,0)
 	if err != nil {
 		beego.Error(err)
 		c.Data["json"] = map[string]interface{}{"info": "ERR", "id": aid}
@@ -2064,7 +1970,7 @@ func (c *ArticleController) AddWxArticles() {
 		beego.Error(err)
 	}
 	//将文章添加到成果id下
-	aid, err := models.AddArticle(title, content, Id)
+	aid, err := models.AddArticle(title, content, Id,0)
 	if err != nil {
 		beego.Error(err)
 		c.Data["json"] = map[string]interface{}{"info": "ERR", "id": aid}
@@ -2143,7 +2049,7 @@ func (c *ArticleController) AddWxArticleFlow() {
 		beego.Error(err)
 	}
 	//将文章添加到成果id下
-	aid, err := models.AddArticle(title, content, Id)
+	aid, err := models.AddArticle(title, content, Id,0)
 	if err != nil {
 		beego.Error(err)
 		c.Data["json"] = map[string]interface{}{"info": "ERR", "id": aid}
@@ -2383,7 +2289,7 @@ func (c *ArticleController) AddProdArticle() {
 		beego.Error(err)
 	}
 	//将文章添加到成果id下
-	_, err = models.AddArticle(subtext, content, pidNum)
+	_, err = models.AddArticle(subtext, content, pidNum,0)
 	if err != nil {
 		beego.Error(err)
 	} else {
@@ -2473,13 +2379,13 @@ func (c *ArticleController) DeleteArticle() {
 	_, role, _, _, _ := checkprodRole(c.Ctx)
 	if role == "1" {
 		// id := c.Ctx.Input.Param(":id")
-		pid := c.Input().Get("pid")
+		id := c.Input().Get("id")
 		//id转成64为
-		pidNum, err := strconv.ParseInt(pid, 10, 64)
+		idNum, err := strconv.ParseInt(id, 10, 64)
 		if err != nil {
 			beego.Error(err)
 		}
-		err = models.DeleteArticle(pidNum)
+		err = models.DeleteArticle(idNum)
 		if err != nil {
 			beego.Error(err)
 		} else {
@@ -2493,6 +2399,37 @@ func (c *ArticleController) DeleteArticle() {
 		// c.Redirect("/roleerr", 302)
 		return
 	}
+}
+
+func (c *ArticleController) DelArticle() {
+	_, _, uid, _, _ := checkprodRole(c.Ctx)
+
+	idarr := c.GetString("ids")
+	array := strings.Split(idarr, ",")
+
+	var ids []int
+	for _, i := range array {
+		idNum, err := strconv.Atoi(i)
+		if err != nil {
+			beego.Error(err)
+		}
+		ids = append(ids, idNum)
+	}
+
+	checkerr := models.CheckArticle(ids,uid)
+	if !checkerr {
+		beego.Error("无权限删除")
+		c.Data["json"] = "fail"
+
+	} else {
+		err := models.DelArticle(ids)
+		if err != nil {
+			beego.Error(err)
+		}
+		c.Data["json"] = "ok"
+	}
+	c.ServeJSON()
+
 }
 
 // @Title post wx artile by articleId
@@ -2546,4 +2483,243 @@ func (c *ArticleController) DeleteWxArticle() {
 			}
 		}
 	}
+}
+
+
+
+func (c *ArticleController) ArticleList() {
+	var err error
+	id := c.Ctx.Input.Param(":id")
+	c.Data["Id"] = id
+	var idNum int64
+	if id != "" {
+		//id转成64为
+		idNum, err = strconv.ParseInt(id, 10, 64)
+		if err != nil {
+			beego.Error(err)
+		}
+	}
+	searchText := c.Input().Get("searchText")
+	limit := c.Input().Get("limit")
+	limit1, err := strconv.ParseInt(limit, 10, 64)
+	if err != nil {
+		beego.Error(err)
+	}
+	page := c.Input().Get("pageNo")
+	page1, err := strconv.ParseInt(page, 10, 64)
+	if err != nil {
+		beego.Error(err)
+	}
+	var offset int64
+	if page1 <= 1 {
+		offset = 0
+	} else {
+		offset = (page1 - 1) * limit1
+	}
+
+	articles, err := models.GetArticlesPage(idNum, limit1, offset, 0, searchText)
+	if err != nil {
+		beego.Error(err)
+	}
+
+
+	Articleslice := make([]ArticleContent, 0)
+
+	for _, w := range articles {
+
+		articles, err := models.GetCate(w.Id)
+		if err != nil {
+			beego.Error(err)
+		}
+
+		articlearr := make([]ArticleContent, 1)
+		articlearr[0].Id = w.Id
+		articlearr[0].Subtext = w.Subtext
+		articlearr[0].Content = articles.Name //返回的content是空，因为真要返回内容，会很影响速度，也没必要
+		articlearr[0].Link = "/project/product/article"
+		articlearr[0].Created = w.Created
+		articlearr[0].Updated = w.Updated
+
+		Articleslice = append(Articleslice, articlearr...)
+
+	}
+
+	count, err := models.GetArticlesCount(idNum, searchText)
+	if err != nil {
+		beego.Error(err)
+	}
+	table := ArticleTableserver{Articleslice, page1, count}
+	c.Data["json"] = table
+	username, role, uid, isadmin, islogin := checkprodRole(c.Ctx)
+	c.Data["Username"] = username
+	c.Data["Ip"] = c.Ctx.Input.IP()
+	c.Data["role"] = role
+	c.Data["IsAdmin"] = isadmin
+	c.Data["IsLogin"] = islogin
+	c.Data["Uid"] = uid
+	c.ServeJSON()
+}
+
+
+
+func (c *ArticleController) GetArticleNav() {
+	username, role, uid, isadmin, islogin := checkprodRole(c.Ctx)
+	c.Data["Username"] = username
+	c.Data["Ip"] = c.Ctx.Input.IP()
+	c.Data["role"] = role
+	c.Data["IsAdmin"] = isadmin
+	c.Data["IsLogin"] = islogin
+	c.Data["Uid"] = uid
+	id := c.Ctx.Input.Param(":id")
+
+	c.Data["IsArticle"] = true
+	c.Data["Id"] = id
+	// var categories []*models.ProjCategory
+	// var err error
+	//id转成64为
+	idNum, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		beego.Error(err)
+	}
+	//取项目本身
+	//category, err := models.GetProj(idNum)
+	category, err := models.GetProj(idNum)
+
+	if err != nil {
+		beego.Error(err)
+	}
+
+
+	categories, err := models.GetProjectsbyPid(idNum)
+	if err != nil {
+		beego.Error(err)
+	}
+
+	var topprojectid int64
+	if category.ParentId != 0 { //如果不是根目录
+		parentidpath := strings.Replace(strings.Replace(category.ParentIdPath, "#$", "-", -1), "$", "", -1)
+		parentidpath1 := strings.Replace(parentidpath, "#", "", -1)
+		patharray := strings.Split(parentidpath1, "-")
+		topprojectid, err = strconv.ParseInt(patharray[0], 10, 64)
+		if err != nil {
+			beego.Error(err)
+		}
+	} else {
+		topprojectid = category.Id
+	}
+	_, products, err := models.GetProjProducts(topprojectid, 2)
+	if err != nil {
+		beego.Error(err)
+	}
+	cates := getsons(idNum, categories)
+
+	var count int
+	//取得这个项目目录下的成果数量
+	productcount, err := models.GetProducts(idNum)
+	if err != nil {
+		beego.Error(err)
+	}
+	count = len(productcount)
+
+	if idNum != 0 {
+		for _, proj := range cates {
+			id := proj.Id
+			for _, m := range products {
+				if id == m.ProjectId {
+					count = count + 1
+				}
+			}
+			slice := getsons(id, categories)
+			// 如果遍历的当前节点下还有节点，则进入该节点进行递归
+			if len(slice) > 0 {
+				getprodcount(slice, categories, products, &count)
+			}
+		}
+	}
+	var tags [1]string
+
+
+	cateIds, err := models.GetCates(0)
+	if err != nil {
+		beego.Error(err)
+	}
+
+	nav := FileNode1{0, "", "", tags, false, []*FileNode1{}}
+
+	catejson2(cateIds,&nav)
+
+
+	c.Data["json"] = nav //data
+	// c.ServeJSON()
+	c.Data["Category"] = category
+
+	u := c.Ctx.Input.UserAgent()
+	matched, err := regexp.MatchString("AppleWebKit.*Mobile.*", u)
+	if err != nil {
+		beego.Error(err)
+	}
+	if matched == true {
+		// beego.Info("移动端~")
+		c.TplName = "mproject.tpl"
+	} else {
+		// beego.Info("电脑端！")
+		c.TplName = "articles.tpl"
+	}
+}
+
+
+
+func catejson2(cates []models.ArticleCate,  node *FileNode1) {
+	// 遍历目录
+	for _, v := range cates {
+		id := v.Id
+		title := v.Name
+		// beego.Info(&count)
+		var tags [1]string
+		// 将当前名和id作为子节点添加到目录下
+		child := FileNode1{id, title, "", tags, true, []*FileNode1{}}
+		node.FileNodes = append(node.FileNodes, &child)
+
+
+	}
+	return
+}
+
+
+//取得某个侧栏id下的导航条
+func (c *ArticleController) GetArticleCateNav() {
+	id := c.Input().Get("id")
+	c.Data["Id"] = id
+
+	idNum,_ := strconv.ParseInt(id, 10, 64)
+	cates, err := models.GetCates(idNum)
+	if err != nil {
+		beego.Error(err)
+	}
+
+
+
+	var slice []FileNode2
+	for _, v := range cates {
+		aa := make([]FileNode2, 1)
+		aa[0].Id = v.Id
+		aa[0].Title = v.Name //名称
+
+		aa[0].LazyLoad = true
+
+		var tags [1]string
+		aa[0].Tags = tags
+		slice = append(slice, aa...) //当v.title为值的时候不用...
+	}
+
+
+
+
+
+
+
+
+
+	c.Data["json"] = slice
+	c.ServeJSON()
 }

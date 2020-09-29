@@ -117,14 +117,6 @@
           valign:"middle"
         },
         {
-          field: 'Articlecontent',
-          title: '文章',
-          formatter:setArticle,
-          events:actionEvents,
-          align:"center",
-          valign:"middle"
-        },
-        {
           field: 'Attachmentlink',
           title: '附件',
           formatter:setAttachment,

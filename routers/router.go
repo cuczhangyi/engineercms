@@ -335,6 +335,20 @@ func init() {
 	//删除目录类
 	beego.Router("/admin/department/deletedepartment", &controllers.AdminController{}, "*:DeleteDepartment")
 
+	//分类列表
+	beego.Router("/admin/articlecate/?:id:string", &controllers.AdminController{}, "*:ArticleCate")
+	//根据分类ID获取第二级分类
+	beego.Router("/admin/articlecateid", &controllers.AdminController{}, "*:ArticleCateId")
+	//添加分类
+	beego.Router("/admin/articlecate/addarticlecate", &controllers.AdminController{}, "*:AddArticleCate")
+	//修改分类
+	beego.Router("/admin/articlecate/updatearticlecate", &controllers.AdminController{}, "*:UpdateArticleCate")
+	//删除分类
+	beego.Router("/admin/articlecate/deletearticlecate", &controllers.AdminController{}, "*:DeleteArticleCate")
+
+
+
+
 	//***后台用户管理
 	beego.Router("/jsoneditor", &controllers.AdminController{}, "get:Jsoneditor")
 
@@ -486,6 +500,21 @@ func init() {
 	beego.Router("/project/product/article/:id:string", &controllers.ArticleController{}, "*:GetArticle")
 	//根据成果id取得成果的所有文章列表_注意articles是复数
 	beego.Router("/project/product/articles/:id:string", &controllers.ArticleController{}, "*:GetArticles")
+
+
+
+
+	beego.Router("/article/list/:id:string", &controllers.ArticleController{}, "*:GetArticleList")
+	//beego.Router("/article/getlist/:id:string", &controllers.ArticleController{}, "*:ArticleList")
+
+	beego.Router("/article/getlist/:id:string", &controllers.ArticleController{}, "*:ArticleList")
+
+	beego.Router("/article/:id([0-9]+)", &controllers.ArticleController{}, "*:GetArticleNav")
+
+	beego.Router("/article/navbar", &controllers.ArticleController{}, "*:GetArticleCateNav")
+
+
+
 	//取得同步成果的所有文章列表_注意articles是复数
 	beego.Router("/project/product/syncharticles", &controllers.ArticleController{}, "*:GetsynchArticles")
 	//根据成果id取得成果的所有文章列表_注意articles是复数
@@ -496,6 +525,9 @@ func init() {
 	beego.Router("/project/product/updatearticle", &controllers.ArticleController{}, "*:UpdateArticle")
 	//删除文章
 	beego.Router("/project/product/deletearticle", &controllers.ArticleController{}, "*:DeleteArticle")
+	//批量删除
+	beego.Router("/project/product/delarticle", &controllers.ArticleController{}, "*:DelArticle")
+
 
 	//查看一个成果
 	// beego.Router("/project/product/?:id:string"

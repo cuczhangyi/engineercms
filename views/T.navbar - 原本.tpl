@@ -34,27 +34,7 @@
           <a href="/project/0">资料</a>
         </li>
         <li {{if .IsArticle}}class="active"{{end}}>
-          <a href="/article/">文章</a>
-        </li>
-        <!-- **********定制导航条菜单开始******** -->
-        <li {{if .IsNav1}} class="dropdown active" {{end}}>
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            试验段 <b class="caret"></b>
-          </a>
-          <ul class="dropdown-menu">
-            <li {{if .IsNav1}} class="active" {{end}}>
-              <a href="/project/25002">设计</a>
-            </li>
-            <li>
-              <a href="/project/25005">建设</a>
-            </li>
-            <li>
-              <a href="/project/25004">监理</a>
-            </li>
-            <li>
-              <a href="/project/25003">施工</a>
-            </li>
-          </ul>
+          <a href="/article/0">软件培训</a>
         </li>
 
         <!-- **********定制导航条菜单结束******** -->
@@ -82,7 +62,7 @@
                   <li><a href="/admin" title="管理">进入后台</a></li>
                   <li><a href="/cms/#/flow/usertobeprocessed" title="邮箱">邮箱</a></li>
                   <li><a href="javascript:void(0)" id="login">重新登录</a></li>
-                  <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>
+{{/*                  <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>*/}}
                   <li><a href="/project/25001/gettimeline" title="大事记">大事记</a></li>
                   <li><a href="/project/25001/getcalendar" title="项目日历">项目日历</a></li>
                   <li><a href="/calendar" title="日程安排">日程安排</a></li>
@@ -96,7 +76,7 @@
                   <li><a href="/cms/#/flow/usertobeprocessed" title="邮箱">邮箱</a></li>
                   <li><a href="/user" title="用户资料">用户资料</a></li>
                   <li><a href="javascript:void(0)" id="login">重新登录</a></li>
-                  <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>
+{{/*                  <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>*/}}
                   <li><a href="/project/25001/gettimeline" title="大事记">大事记</a></li>
                   <li><a href="/project/25001/getcalendar" title="项目日历">项目日历</a></li>
                   <li><a href="/calendar" title="日程安排">日程安排</a></li>
@@ -112,7 +92,7 @@
                   <li><a href="/admin" title="管理">进入后台</a></li>
                   <li><a href="/cms/#/flow/usertobeprocessed" title="邮箱">邮箱</a></li>
                   <li><a href="javascript:void(0)" id="login">重新登录</a></li>
-                  <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>
+{{/*                  <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>*/}}
                   <li><a href="/project/25001/gettimeline" title="大事记">大事记</a></li>
                   <li><a href="/project/25001/getcalendar" title="项目日历">项目日历</a></li>
                   <li><a href="/calendar" title="日程安排">日程安排</a></li>
@@ -124,7 +104,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{.Username}} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="javascript:void(0)" id="login">登陆</a></li>
-                  <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>
+{{/*                  <li><a href="/v1/wx/ssologin" title="单点登录">SSO单点登陆</a></li>*/}}
                 </ul>
               </li>
             {{end}}

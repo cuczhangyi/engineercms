@@ -133,7 +133,7 @@
       <button {{if ne "true" .RoleAdd}} style="display:none" {{end}} type="button" data-name="addButton1" id="addButton1" class="btn btn-default"> <i class="fa fa-plus-square-o" title="多附件模式">添加</i>
       </button>
       <!-- 添加文章 -->
-      <button {{if ne "true" .RoleAdd}} style="display:none" {{end}} type="button" data-name="addButton2" id="addButton2" class="btn btn-default"> <i class="fa fa-plus-square" title="文章模式">添加</i>
+{{/*      <button {{if ne "true" .RoleAdd}} style="display:none" {{end}} type="button" data-name="addButton2" id="addButton2" class="btn btn-default"> <i class="fa fa-plus-square" title="文章模式">添加</i>*/}}
       </button>
       <button {{if ne "true" .RoleUpdate}} style="display:none" {{end}} type="button" data-name="editorProdButton" id="editorProdButton" class="btn btn-default"> <i class="fa fa-edit" title="修改成果信息">编辑</i>
       </button>
@@ -235,21 +235,12 @@
           {
             field: 'Label',
             title: '标签',
-            formatter: setLable,
             align: "center",
             valign: "middle"
           },
           {
             field: 'Principal',
             title: '设计',
-            align: "center",
-            valign: "middle"
-          },
-          {
-            field: 'Articlecontent',
-            title: '文章',
-            formatter: setArticle,
-            events: actionEvents,
             align: "center",
             valign: "middle"
           },
@@ -285,15 +276,15 @@
             align: "center",
             valign: "middle"
           },
-          {
-            field: 'Relevancy',
-            title: '关联',
-            formatter: RelevFormatter,
-            // events:actionRelevancy,
-            // visible："false",
-            align: "center",
-            valign: "middle"
-          },
+          // {
+          //   field: 'Relevancy',
+          //   title: '关联',
+          //   formatter: RelevFormatter,
+          //   // events:actionRelevancy,
+          //   // visible："false",
+          //   align: "center",
+          //   valign: "middle"
+          // },
           {
             field: 'DocState',
             title: '状态',
@@ -333,7 +324,7 @@
           var relevarray = new Array()
           for (i = 0; i < array.length; i++) {
             // relevarray[i]=array[i];
-            relevarray[i] = '<a href="javascript:gototree(' + value[i].ProjectId + ')" title="查看" target="_blank">' + value[i].Relevancy + '</a>';
+            relevarray[i] = '<a href="javascript:gototree(' + value[i].ProjectId + ')" title="查看" >' + value[i].Relevancy + '</a>';
           }
           return relevarray.join(",");
           // articleUrl= '<a href="'+value[0].Link+'/'+value[0].Id+'" title="查看" target="_blank"><i class="fa fa-file-text-o"></i></a>';
@@ -344,7 +335,7 @@
           var relevarray = new Array()
           for (i = 0; i < value.length; i++) {
             // relevarray[i]=value[i].Relevancy;
-            relevarray[i] = '<a href="javascript:gototree(' + value[i].ProjectId + ')" title="查看" target="_blank">' + value[i].Relevancy + '</a>';
+            relevarray[i] = '<a href="javascript:gototree(' + value[i].ProjectId + ')" title="查看" >' + value[i].Relevancy + '</a>';
           }
           return relevarray.join(",");
           // articleUrl= "<a class='article' href='javascript:void(0)' title='查看文章列表'><i class='fa fa-list-ol'></i></a>";
@@ -841,6 +832,10 @@
         alert("权限不够！");
         return;
       }
+      if({{.Id}} == 0){
+        alert("请在左侧选择类型!");
+        return;
+      }
       $("input#pid").remove();
       var th1 = "<input id='pid' type='hidden' name='pid' value='" + {{.Id }} + "'/>"
       $(".modal-body").append(th1);
@@ -865,9 +860,6 @@
       if (selectRow[0].Uid === {{.Uid }} || {{.RoleUpdate }} == "true") {
         if (selectRow[0].Attachmentlink[0]) { //||selectRow[0].Pdflink[0].Link||selectRow[0].Articlecontent[0].Link)
           var site = /http:\/\/.*?\//.exec(selectRow[0].Attachmentlink[0].Link); //非贪婪模式 
-        }
-        if (selectRow[0].Articlecontent[0]) {
-          var site = /http:\/\/.*?\//.exec(selectRow[0].Articlecontent[0].Link); //非贪婪模式 
         }
         if (selectRow[0].Pdflink[0]) {
           var site = /http:\/\/.*?\//.exec(selectRow[0].Pdflink[0].Link); //非贪婪模式 
@@ -939,9 +931,6 @@
 
         if (selectRow[0].Attachmentlink[0]) { //||selectRow[0].Pdflink[0].Link||selectRow[0].Articlecontent[0].Link)
           var site = /http:\/\/.*?\//.exec(selectRow[0].Attachmentlink[0].Link); //非贪婪模式 
-        }
-        if (selectRow[0].Articlecontent[0]) {
-          var site = /http:\/\/.*?\//.exec(selectRow[0].Articlecontent[0].Link); //非贪婪模式 
         }
         if (selectRow[0].Pdflink[0]) {
           var site = /http:\/\/.*?\//.exec(selectRow[0].Pdflink[0].Link); //非贪婪模式 
@@ -1076,9 +1065,6 @@
         if (selectRow[0].Attachmentlink[0]) { //||selectRow[0].Pdflink[0].Link||selectRow[0].Articlecontent[0].Link)
           var site = /http:\/\/.*?\//.exec(selectRow[0].Attachmentlink[0].Link); //非贪婪模式 
         }
-        if (selectRow[0].Articlecontent[0]) {
-          var site = /http:\/\/.*?\//.exec(selectRow[0].Articlecontent[0].Link); //非贪婪模式 
-        }
         if (selectRow[0].Pdflink[0]) {
           var site = /http:\/\/.*?\//.exec(selectRow[0].Pdflink[0].Link); //非贪婪模式 
         }
@@ -1135,9 +1121,6 @@
       if (selectRow[0].Uid === {{.Uid }} || {{.RoleFlow }} == "true") {
         if (selectRow[0].Attachmentlink[0]) { //||selectRow[0].Pdflink[0].Link||selectRow[0].Articlecontent[0].Link)
           var site = /http:\/\/.*?\//.exec(selectRow[0].Attachmentlink[0].Link); //非贪婪模式 
-        }
-        if (selectRow[0].Articlecontent[0]) {
-          var site = /http:\/\/.*?\//.exec(selectRow[0].Articlecontent[0].Link); //非贪婪模式 
         }
         if (selectRow[0].Pdflink[0]) {
           var site = /http:\/\/.*?\//.exec(selectRow[0].Pdflink[0].Link); //非贪婪模式 
@@ -1375,7 +1358,7 @@
                 <div class="form-group" style="width: 100%;">
                   <label class="col-sm-3 control-label">关键字</label>
                   <div class="col-sm-7">
-                    <input type="tel" class="form-control" id="prodlabel" name="prodlabel" placeholder="以英文,号分割"></div>
+                    <input type="tel" class="" id="prodlabel" name="prodlabel" placeholder="以英文,号分割"></div>
                 </div>
                 <div class="form-group" style="width: 100%;">
                   <label class="col-sm-3 control-label">设计</label>

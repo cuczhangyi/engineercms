@@ -2,6 +2,7 @@
 package controllers
 
 import (
+	"fmt"
 	// "encoding/json"
 	"github.com/3xxx/engineercms/models"
 	"github.com/astaxie/beego"
@@ -90,6 +91,145 @@ func (c *ProjController) Get() {
 	}
 	c.Data["Select2"] = slice1
 }
+
+func (c *ProjController) GetAll() {
+
+	username, role, uid, isadmin, islogin := checkprodRole(c.Ctx)
+	c.Data["Username"] = username
+	c.Data["Ip"] = c.Ctx.Input.IP()
+	c.Data["role"] = role
+	c.Data["IsAdmin"] = isadmin
+	c.Data["IsLogin"] = islogin
+	c.Data["Uid"] = uid
+	id := 0
+
+	c.Data["IsProject"] = true
+
+	c.Data["Id"] = id
+
+
+	// var categories []*models.ProjCategory
+	// var err error
+	//id转成64为
+	idNum, err := strconv.ParseInt(string(id), 10, 64)
+	if err != nil {
+		beego.Error(err)
+	}
+
+	//取项目本身
+	category, err := models.GetProj(idNum)
+	if err != nil {
+		beego.Error(err)
+	}
+
+	category.Title = "全部"
+
+
+	//记录开始时间
+	// start := time.Now()
+	//取项目所有子孙
+	categories, err := models.GetProjectsbyPid(idNum)
+	if err != nil {
+		beego.Error(err)
+	}
+	//记录结束时间差
+	// elapsed := time.Since(start)
+	// beego.Info(elapsed)
+	//根据项目顶级id取得项目下所有成果
+	var topprojectid int64
+	if category.ParentId != 0 { //如果不是根目录
+		parentidpath := strings.Replace(strings.Replace(category.ParentIdPath, "#$", "-", -1), "$", "", -1)
+		parentidpath1 := strings.Replace(parentidpath, "#", "", -1)
+		patharray := strings.Split(parentidpath1, "-")
+		topprojectid, err = strconv.ParseInt(patharray[0], 10, 64)
+		if err != nil {
+			beego.Error(err)
+		}
+	} else {
+		topprojectid = category.Id
+	}
+	_, products, err := models.GetProjProducts(topprojectid, 2)
+	if err != nil {
+		beego.Error(err)
+	}
+	//记录结束时间差
+	// elapsed = time.Since(start)
+	// beego.Info(elapsed)
+	//一次性查出所有成果
+	//或者存储成果数据的时候存上项目id，相当于加了个索引
+	// products, err := models.GetAllProducts()
+	// if err != nil {
+	// 	beego.Error(err)
+	// }
+	//根据id取出下级
+	cates := getsons(idNum, categories)
+	//算出最大级数
+	// grade := make([]int, 0)
+	// for _, v := range categories {
+	// 	grade = append(grade, v.Grade)
+	// }
+	// height := intmax(grade[0], grade[1:]...)
+	var count int
+	//取得这个项目目录下的成果数量
+	productcount, err := models.GetProducts(idNum)
+	if err != nil {
+		beego.Error(err)
+	}
+	count = len(productcount)
+	// beego.Info(count)
+
+	for _, proj := range cates {
+		id := proj.Id
+		for _, m := range products {
+			if id == m.ProjectId {
+				count = count + 1
+			}
+		}
+		// beego.Info(count)
+		slice := getsons(id, categories)
+		// 如果遍历的当前节点下还有节点，则进入该节点进行递归
+		if len(slice) > 0 {
+			getprodcount(slice, categories, products, &count)
+		}
+	}
+	// beego.Info(count)
+	var tags [1]string
+	tags[0] = strconv.Itoa(count)
+	//递归生成目录json
+	// root := FileNode1{category.Id, category.Title, "", count, true, []*FileNode1{}}
+	root := FileNode1{category.Id, category.Title, "", tags, false, []*FileNode1{}}
+	// walk(category.Id, &root)
+	// maketreejson1(cates, categories, products, &root)
+	maketreejson2(cates, categories, products, &root)
+	//记录结束时间差
+	// elapsed = time.Since(start)
+	// beego.Info(elapsed)
+	// beego.Info(root)
+	// data, _ := json.Marshal(root)
+	c.Data["json"] = root //data
+	// c.ServeJSON()
+	c.Data["Category"] = category
+
+	u := c.Ctx.Input.UserAgent()
+	matched, err := regexp.MatchString("AppleWebKit.*Mobile.*", u)
+	if err != nil {
+		beego.Error(err)
+	}
+	if matched == true {
+		// beego.Info("移动端~")
+		c.TplName = "mproject.tpl"
+	} else {
+		// beego.Info("电脑端！")
+		c.TplName = "project.tpl"
+	}
+
+}
+
+
+
+
+
+
 
 // @Title get cms projectlist...
 // @Description get projectlist..
@@ -556,6 +696,7 @@ func (c *ProjController) GetProjectTree() {
 func (c *ProjController) GetProjCate() {
 	// id := c.Ctx.Input.Param(":id")
 	id := c.Input().Get("id")
+	fmt.Println(id,"====================")
 	//id转成64为
 	idNum, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
@@ -647,6 +788,8 @@ func (c *ProjController) GetProjCate() {
 		// beego.Info(&count)
 		var tags [1]string
 		tags[0] = strconv.Itoa(count)
+
+		fmt.Println(tags)
 		aa[0].Tags = tags
 		// 	cc[0].Selectable = false
 		// 	// slice1 = append(slice1, aa...)当aa为slice的时候要...,

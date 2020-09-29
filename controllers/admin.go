@@ -130,8 +130,6 @@ func (c *AdminController) Admin() {
 		case "032": //角色-用户
 			c.TplName = "admin_users.tpl"
 
-		// case "033": //用户组
-		// 	c.TplName = "admin_usergroup.tpl"
 		case "041": //项目编辑
 			c.TplName = "admin_projectstree.tpl"
 		case "042": //同步IP async
@@ -150,7 +148,8 @@ func (c *AdminController) Admin() {
 			c.TplName = "admin_infolog.tpl"
 		case "062": //系统错误日志
 			c.TplName = "admin_errlog.tpl"
-
+		case "063": //文章分类
+			c.TplName = "admin_articlecate.tpl"
 		default:
 			c.TplName = "admin_calendar.tpl"
 		}
@@ -1899,3 +1898,151 @@ func (c *AdminController) InitJson() {
 //    echo json_encode($data);
 
 //删除日历
+
+
+//文章分类
+func (c *AdminController) ArticleCate() {
+	id := c.Ctx.Input.Param(":id")
+	c.Data["Id"] = id
+	c.Data["Ip"] = c.Ctx.Input.IP()
+	// var categories []*models.AdminDepartment
+	var err error
+	if id == "" { //如果id为空，则查询类别
+		id = "0"
+	}
+	//pid转成64为
+	idNum, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		beego.Error(err)
+	}
+	categories, err := models.GetArticleCate(idNum)
+	if err != nil {
+		beego.Error(err)
+	}
+
+	c.Data["json"] = categories
+	c.ServeJSON()
+}
+
+func (c *AdminController) ArticleCateId() {
+	id := c.Ctx.Input.Param(":id")
+	//title := c.Input().Get("title")
+	// beego.Info(title)
+	idNum, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		beego.Error(err)
+	}
+	categories, err := models.GetArticleCateId(idNum)
+	// beego.Info(categories)
+	if err != nil {
+		beego.Error(err)
+	}
+	c.Data["json"] = categories
+	c.ServeJSON()
+	// c.TplName = "admin_category.tpl"
+}
+
+
+
+//添加
+func (c *AdminController) AddArticleCate() {
+	_, role, _, _, _ := checkprodRole(c.Ctx)
+	if role != "1" {
+		route := c.Ctx.Request.URL.String()
+		c.Data["Url"] = route
+		c.Redirect("/roleerr?url="+route, 302)
+		// c.Redirect("/roleerr", 302)
+		return
+	}
+	// pid := c.Ctx.Input.Param(":id")
+	pid := c.Input().Get("pid")
+	name := c.Input().Get("name")
+	//pid转成64为
+	var pidNum int64
+	var err error
+	if pid != "" {
+		pidNum, err = strconv.ParseInt(pid, 10, 64)
+		if err != nil {
+			beego.Error(err)
+		}
+	} else {
+		pidNum = 0
+	}
+
+	_, err = models.AddArticleCate(pidNum, name)
+	if err != nil {
+		beego.Error(err)
+	} else {
+		c.Data["json"] = "ok"
+		c.ServeJSON()
+	}
+}
+
+//修改
+func (c *AdminController) UpdateArticleCate() {
+	_, role, _, _, _ := checkprodRole(c.Ctx)
+	if role != "1" {
+		route := c.Ctx.Request.URL.String()
+		c.Data["Url"] = route
+		c.Redirect("/roleerr?url="+route, 302)
+		// c.Redirect("/roleerr", 302)
+		return
+	}
+	// pid := c.Ctx.Input.Param(":id")
+	cid := c.Input().Get("cid")
+	name := c.Input().Get("name")
+	//pid转成64为
+	cidNum, err := strconv.ParseInt(cid, 10, 64)
+	if err != nil {
+		beego.Error(err)
+	}
+
+	err = models.UpdateArticleCate(cidNum, name)
+	if err != nil {
+		beego.Error(err)
+	} else {
+		c.Data["json"] = "ok"
+		c.ServeJSON()
+	}
+}
+
+//删除，如果有下级，一起删除
+func (c *AdminController) DeleteArticleCate() {
+	_, role, _, _, _ := checkprodRole(c.Ctx)
+	if role != "1" {
+		route := c.Ctx.Request.URL.String()
+		c.Data["Url"] = route
+		c.Redirect("/roleerr?url="+route, 302)
+		// c.Redirect("/roleerr", 302)
+		return
+	}
+	ids := c.GetString("ids")
+	array := strings.Split(ids, ",")
+	for _, v := range array {
+		// pid = strconv.FormatInt(v1, 10)
+		//id转成64位
+		idNum, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			beego.Error(err)
+		}
+		//查询下级，即分级
+		categories, err := models.GetArticleCate(idNum)
+		if err != nil {
+			beego.Error(err)
+		} else {
+			for _, v1 := range categories {
+				err = models.DeleteArticleCate(v1.Id)
+				if err != nil {
+					beego.Error(err)
+				}
+			}
+		}
+		err = models.DeleteArticleCate(idNum)
+		if err != nil {
+			beego.Error(err)
+		} else {
+			c.Data["json"] = "ok"
+			c.ServeJSON()
+		}
+	}
+}

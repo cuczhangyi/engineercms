@@ -131,10 +131,10 @@
   <script>
     /*数据json,"PDF":"","DWG":"","DOC":"","XLS":""*/
     // 权限表
-    var json =  [{"Id":"1","Title":"添加成果","Action":"POST"},
-                {"Id":"2","Title":"编辑成果","Action":"PUT"},
-                {"Id":"3","Title":"删除成果","Action":"DELETE"},
-                {"Id":"4","Title":"读取成果","Action":"GET"}];
+    var json =  [{"Id":"1","Title":"添加权限","Action":"POST"},
+                {"Id":"2","Title":"编辑权限","Action":"PUT"},
+                {"Id":"3","Title":"删除权限","Action":"DELETE"},
+                {"Id":"4","Title":"读取权限","Action":"GET"}];
     var json1 = [{"Id":"5","Title":"任意","checked":true},
                 {"Id":"6","Title":"PDF"}
                 ];  

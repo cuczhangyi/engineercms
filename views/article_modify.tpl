@@ -59,16 +59,10 @@
 <div id="editor" class="col-xs-12 col-sm-12 col-lg-8 col-md-8 col-md-offset-2">
   <h3>编辑文章</h3>
   <!-- <form> -->
-    <!-- <div class="form-group">
-      <label>编号:</label>
-      <input type="text" class="form-control" readonly="readonly" placeholder="Enter account" value="{{.product.ProjectId}}">
-    </div> -->
     <div class="form-group">
       <label>标题:</label>
-      <input type="text" class="form-control" readonly="readonly"  placeholder="Enter account" value="{{.product.Title}}"></div>
-    <div class="form-group">
-      <label>副标题:</label>
-      <input id="subtext" name="subtext" type="text" class="form-control"  placeholder="Enter Subtext" value="{{.article.Subtext}}"></div>
+      <input id="subtext" name="subtext" type="text" class="form-control"  placeholder="Enter Subtext" value="{{.article.Subtext}}">
+    </div>
     <!-- <div class="form-group"> -->
       <!-- <label>关键字:</label>
       <input type="text" class="form-control" readonly="readonly" value="{{.product.Label}}"></div>

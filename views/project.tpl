@@ -106,9 +106,7 @@
       <div class="breadcrumbs">
         <ol class="breadcrumb" style="margin-bottom: 2px;" split="&gt;">
           <li>
-            <a href="javascript:gototree({{.Category.Id}})"> <i class="fa fa-home" aria-hidden="true"></i>
-              项目编号：{{.Category.Code}}
-            </a>
+            <i class="fa fa-home" aria-hidden="true"></i>项目编号：{{.Category.Code}}
           </li>
         </ol>
       </div>
